@@ -4,14 +4,15 @@
 Construir una aplicación de consola que reutilice la lógica del Add-in para generar archivos DBML de tablas de D365FO. La consola debe aceptar los mismos parámetros funcionales que el formulario principal (`ErdForm`), pero enfocada solo en producir DBML y dejar el resultado en archivo o salida estándar.
 
 ## Entradas esperadas (equivalentes al formulario)
-- `--model <nombre>`: modelo seleccionado en el combo de modelos.
-- `--table <tabla>` (repetible): tablas iniciales introducidas manualmente.
-- `--add-from-model`: agrega todas las tablas del modelo indicado.
-- `--add-inward <tabla>` / `--add-outward <tabla>` / `--add-related`: incluye tablas relacionadas entrantes, salientes o todas las relacionadas, respectivamente.
-- `--include-standard` / `--include-extensions`: incluir campos estándar o de extensiones en la salida DBML.
+- `--model <nombre>`: modelo contenedor de todas las tablas.
+- `--table <tabla>`: tablas separadas por ',' y que acepte wildcard '*'.
+- `--add-inward <tabla>` / `--add-outward <tabla>` / `--add-related <tabla>`: incluye tablas relacionadas entrantes, salientes o todas las relacionadas, para una sola tabla ingresada.
+- `--include-non-KeyFields`: Al usar este parámetro incluye todos los campos, sino solo los campos clave (clave primaria, claves foraneas, campos pertenecientes a índices).
+- `--include-extensions`: incluir campos de extensiones en la salida DBML.
 - `--mark-mandatory`: marcar campos obligatorios con `not null` en DBML.
 - `--simplify-types`: convertir EDT a tipos simples.
-- `--ignore-staging` / `--ignore-self-references`: filtrar tablas staging o relaciones consigo mismo.
+- `--ignore-staging`: filtrar tablas staging.
+- `--ignore-self-references`: filtrar relaciones consigo mismo.
 - `--output <ruta>`: archivo de salida; si se omite, se escribe a stdout.
 
 ## Suposiciones y dependencias
@@ -20,11 +21,11 @@ Construir una aplicación de consola que reutilice la lógica del Add-in para ge
 
 ## Pasos propuestos
 1. **Crear el proyecto**
-   - Generar un proyecto de consola .NET en la solución (`Waywo.DbSchema.Console` o similar).
+   - Generar un proyecto de consola .NET en la solución (`Waywo.DbSchema.Console` o similar) y agregarlo a la solución `Waywo.DbSchema.sln`.
    - Referenciar el proyecto `Waywo.DbSchema.AddIn` o extraer las clases reutilizables (`Providers`, `Model`, `Adapters`) a una biblioteca compartida para evitar dependencias innecesarias con Windows Forms.
 
 2. **Inicializar el proveedor de metadatos**
-   - Reusar `DataModelProviderFactory` cuando se ejecute dentro de Visual Studio o implementar una variante que cargue el `RuntimeMetadataProvider` apuntando al directorio de metadatos (`MetadataDirectory`, `ModelStore`) en entornos fuera del IDE.
+   - Reusar `DataModelProviderFactory` o implementar una variante que cargue el `RuntimeMetadataProvider` apuntando al directorio de metadatos (`MetadataDirectory`, `ModelStore`) en entornos fuera del IDE.
    - Instanciar `IDataModelProvider dataProvider = new D365FODataModelProvider(metadataProvider);` y `var dbmlProvider = new DBMLSchemaProvider(dataProvider);`.
 
 3. **Parsear argumentos**
@@ -41,8 +42,11 @@ Construir una aplicación de consola que reutilice la lógica del Add-in para ge
    - Si `--output` está presente, escribir el contenido al archivo (creando directorios si es necesario); de lo contrario, imprimir en consola.
 
 6. **Experiencia de uso y ejemplos**
-   - Ejemplo mínimo: `Waywo.DbSchema.Console --model ApplicationSuite --table CustTable --include-standard --mark-mandatory > schema.dbml`.
-   - Ejemplo ampliado con relaciones: `Waywo.DbSchema.Console --model ApplicationSuite --table CustTable --add-related --include-standard --include-extensions --simplify-types --ignore-staging --output cust-schema.dbml`.
+   - Ejemplo mínimo #1: `Waywo.DbSchema.Console --model ApplicationSuite --include-non-KeyFields --mark-mandatory > schema.dbml`.
+   - Ejemplo mínimo #2: `Waywo.DbSchema.Console --table AxnCore* --include-non-KeyFields --mark-mandatory > schema.dbml`.
+   - Ejemplo mínimo #3: `Waywo.DbSchema.Console --model Axxon365Core --table 'AxnCore*,CustTable' --include-non-KeyFields --mark-mandatory > schema.dbml`.
+   - Ejemplo ampliado con relaciones #4: `Waywo.DbSchema.Console --model ApplicationSuite --add-related --include-non-KeyFields --include-extensions --simplify-types --ignore-staging --output cust-schema.dbml`.
+   - Ejemplo ampliado con relaciones #5: `Waywo.DbSchema.Console --add-related CustTable --include-non-KeyFields --include-extensions --simplify-types --ignore-staging --output cust-schema.dbml`.
 
 7. **Pruebas y validación**
    - Validar que el archivo DBML se abra en dbdiagram.io sin errores de sintaxis.
