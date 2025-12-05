@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Waywo.DbSchema.Console</AssemblyName>
+    <RootNamespace>Waywo.DbSchema.ConsoleApp</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Waywo.DbSchema.AddIn\Waywo.DbSchema.AddIn.csproj" />
+  </ItemGroup>
+</Project>
