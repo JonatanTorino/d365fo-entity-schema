@@ -1,9 +1,10 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waywo.DbSchema.AddIn", "Waywo.DbSchema.AddIn\Waywo.DbSchema.AddIn.csproj", "{40A71709-910E-4780-9E66-E9F709899A83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waywo.DbSchema.Console", "Waywo.DbSchema.Console\Waywo.DbSchema.Console.csproj", "{F5D772E5-C6FC-4E1E-B922-CF8E89B65B92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2F34E5BE-9E80-4820-8519-9AE2A04E3925}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,6 +21,10 @@ Global
 		{40A71709-910E-4780-9E66-E9F709899A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40A71709-910E-4780-9E66-E9F709899A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40A71709-910E-4780-9E66-E9F709899A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5D772E5-C6FC-4E1E-B922-CF8E89B65B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5D772E5-C6FC-4E1E-B922-CF8E89B65B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5D772E5-C6FC-4E1E-B922-CF8E89B65B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5D772E5-C6FC-4E1E-B922-CF8E89B65B92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
