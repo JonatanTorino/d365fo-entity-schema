@@ -92,17 +92,43 @@ namespace Waywo.DbSchema.AddIn
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            var existing = this.controller.DataModelProvider.Tables.FirstOrDefault(t => t.ToUpper() == tableTextBox.Text.ToUpper());
-            if (existing == null)
+            if (!string.IsNullOrEmpty(tableTextBox.Text))
             {
-                this.controller.DataModelProvider.AddTable(tableTextBox.Text);
+                Cursor.Current = Cursors.WaitCursor;
+
+                int previousCount = this.controller.DataModelProvider.Tables.Count;
+
+                this.controller.DataModelProvider.AddTablesByPartialName(tableTextBox.Text);
 
                 tablesListBox.DataSource = null;
                 tablesListBox.DataSource = this.controller.DataModelProvider.Tables;
 
+                int addedCount = this.controller.DataModelProvider.Tables.Count - previousCount;
+
                 if (this.controller.DataModelProvider.Tables.Count > 0)
                 {
                     tablesListBox.SelectedIndex = 0;
+                }
+
+                Cursor.Current = Cursors.Default;
+
+                if (addedCount > 0)
+                {
+                    MessageBox.Show(
+                        string.Format("{0} tabla(s) agregada(s) con coincidencia '{1}'", addedCount, tableTextBox.Text),
+                        "Búsqueda completada",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        string.Format("No se encontraron tablas que contengan '{0}'", tableTextBox.Text),
+                        "Sin resultados",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                 }
             }
         }

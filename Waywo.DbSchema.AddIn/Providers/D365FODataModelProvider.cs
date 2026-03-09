@@ -292,6 +292,35 @@ namespace Waywo.DbSchema.Providers
             return this;
         }
 
+        public IDataModelProvider AddTablesByPartialName(string partialName)
+        {
+            if (!string.IsNullOrEmpty(partialName))
+            {
+                List<string> newTables = new List<string>();
+                newTables.AddRange(this.Tables);
+
+                foreach (string key in this.provider.Tables.GetPrimaryKeys())
+                {
+                    if (key.ToUpper().Contains(partialName.ToUpper()))
+                    {
+                        if (!newTables.Any(t => t.ToUpper() == key.ToUpper()))
+                        {
+                            AxTable metaData = this.provider.Tables.Read(key);
+                            if (metaData != null)
+                            {
+                                newTables.Add(metaData.Name);
+                            }
+                        }
+                    }
+                }
+
+                this.Tables = newTables;
+                this.Tables.Sort();
+            }
+
+            return this;
+        }
+
 
         protected List<Relation> GetRelationsBetweenTables()
         {

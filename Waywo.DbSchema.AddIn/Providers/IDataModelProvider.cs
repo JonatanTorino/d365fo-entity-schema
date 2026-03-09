@@ -10,6 +10,7 @@ namespace Waywo.DbSchema.Providers
         IDataModelProvider AddInwardTables(string tableName);
         IDataModelProvider AddOutwardTables(string tableName);
         IDataModelProvider AddTablesFromModel(string modelName);
+        IDataModelProvider AddTablesByPartialName(string partialName);
         
         string Model { get; set; }
         bool SimplifyTypes { get; set; }
